@@ -1,0 +1,67 @@
+---
+version: "3"
+services:
+  db:
+    container_name: db
+    build: ./database/
+    image: maheswar7981/webapps:db
+    ports:
+      - "3306:3306"
+    networks:
+      - mydata
+    volumes:
+      - appvolume:/db
+
+  auth_service:
+    container_name: auth-container
+    build: ./auth/
+    image: maheswar7981/webapps:auth
+    ports:
+      - "5001:5001"
+    networks:
+      - mydata
+    volumes:
+      - appvolume:/auth
+
+  book_service:
+    container_name: book-container
+    build: ./book/
+    image: maheswar7981/webapps:book
+    ports:
+      - "5002:5002"
+    networks:
+      - mydata
+    volumes:
+      - appvolume:/book
+
+  borrow_service:
+    container_name: borrow-container
+    build: ./borrow/
+    image: maheswar7981/webapps:borrow
+    ports:
+      - "5003:5003"
+    networks:
+      - mydata
+    volumes:
+      - appvolume:/borrow
+
+  app_service:
+    container_name: app-container
+    build: .
+    image: maheswar7981/webapps:app
+    ports:
+      - "5000:5000"
+    networks:
+      - mydata
+    volumes:
+      - appvolume:/app
+
+networks:
+  mydata:
+    name: mydata
+    driver: bridge
+
+volumes:
+  appvolume:
+    name: appvolume
+    driver: local
